@@ -1,0 +1,164 @@
+
+<!doctype html>
+<html lang="en" ng-app="myApp" ng-cloak>
+
+<head>
+  <title>Chess</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <style>
+  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide {
+    display: none !important;
+  }
+  </style>
+  <base target="_blank">
+  <link rel="stylesheet" href="bower_components/lumx/dist/lumx.css">
+  <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/chessboard-0.3.0.css" />
+  <link rel="shortcut icon" type="img/png" href="images/icon.png">
+  <link rel="manifest" href="manifest.json">
+</head>
+
+<body ng-controller="Main" flow-prevent-drop flex-container="column">
+
+
+
+  <!-- Welcome page -->
+
+  <div class="welcome row grad-bg" ng-hide="loggedIn">
+
+
+
+    <div class="absolute-center tc-white-1">
+      <div class="welcome-title">
+        <span class="icon icon--xl icon--flat mdi mdi-xbox-controller tc-white-1"></span>
+        <span class="app-name fs-display-2">Chess</span>
+      </div>
+      <div class="mt fs-subhead">Your personal chess manager</div>
+      <div><button class="btn btn--m btn--blue btn--raised" lx-ripple aria-label="Login" ng-click="TLSlogin()">
+        <span>{{loginTLSButtonText}}</span>
+      </button></div>
+    </div>
+    <!-- Login -->
+  </div>
+
+  <div class="welcome row grad-bg" ng-hide="!loggedIn">
+
+
+    <div class="card">
+      <div class="toolbar">
+        <div class="toolbar__left mr+++">
+          <button class="btn btn--l btn--black btn--icon" lx-ripple>
+            <i class="mdi mdi-menu"></i>
+          </button>
+        </div>
+
+        <span class="toolbar__label fs-title">Chess</span>
+
+        <div class="toolbar__right">
+
+          <lx-dropdown position="right" from-top>
+
+            <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle>
+              <i class="mdi mdi-dots-vertical"></i>
+            </button>
+
+            <lx-dropdown-menu>
+              <ul>
+                <li><a ng-click="openDialog('about')" class="dropdown-link">About</a></li>
+              </ul>
+            </lx-dropdown-menu>
+          </lx-dropdown>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="tc-white-1" flex-container="row">
+
+      <div flex-item="2" flex-item-order="1">
+        <div class="sidebar sidebar--shown"
+            ng-class="{'sidebar--shown': isVisible()}">
+            <div class="sidebar-menu">
+                <ul>
+                    <li><a class="sidebar-menu__link">Sidebar item 1</a></li>
+                    <li><a class="sidebar-menu__link">Sidebar item 2</a></li>
+                </ul>
+            </div>
+        </div>
+      </div>
+
+      <div flex-item="6" flex-item-order="2"><div>
+
+        <div id="board" style="width: 400px"></div>
+        <div>
+
+
+          <div><a href="{{user}}">{{user}}</a></div>
+
+
+          <div flex-container="row" flex-gutter="24">
+            <div flex-item>
+              <lx-text-field label="Storage URI">
+                <input type="text" ng-model="storageURI">
+              </lx-text-field>
+            </div>
+          </div>
+
+          <button class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="logout()">
+            Logout
+          </button>
+
+        </div>
+        <!-- Login -->
+      </div>
+
+    </div></div>
+
+  </div>
+
+  <!-- About -->
+  <lx-dialog class="dialog dialog--l" auto-close="true" id="about">
+    <div class="dialog__header">
+      <div class="toolbar bgc-blue-A700 pl+">
+        <span class="toolbar__label tc-white fs-title">
+          About Chess
+        </span>
+        <div class="toolbar__right">
+          <button class="btn btn--l btn--white btn--icon" lx-ripple lx-dialog-close>
+            <span aria-hidden="true" class="mdi mdi-close"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="dialog__content p+">
+      <p>Chess is a personal chess game manager, that uses Linked Data to store games on your personal online datastore.</p>
+      <br>
+      <p>This application follows the <a href="https://github.com/linkeddata/SoLiD/">SoLiD specifications</a> to ensure that your data stays private.</p>
+    </div>
+    <div class="dialog__actions">
+      <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Close</button>
+    </div>
+  </lx-dialog>
+
+
+  <!-- Deps -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/velocity/velocity.min.js"></script>
+  <script src="bower_components/angular/angular.min.js"></script>
+  <script src="bower_components/angular-ui/build/angular-ui.min.js"></script>
+  <script src="bower_components/lumx/dist/lumx.min.js"></script>
+  <script src="vendor/rdflib.min.js"></script>
+  <script src="vendor/common.js"></script>
+
+  <script src="http://chessboardjs.com/js/chessboard.js"></script>
+  <script src="http://chessboardjs.com/js/chess.js"></script>
+  <!-- App -->
+  <script src="app/app.js"></script>
+</body>
+
+</html>
