@@ -115,7 +115,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
       board.position(game.fen());
       $scope.position = game.fen();
       $scope.save();
-      $scope.audio.play();
+      //$scope.audio.play();
     };
 
     var updateStatus = function() {
