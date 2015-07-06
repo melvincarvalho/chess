@@ -35,7 +35,8 @@ var gg;
 $rdf.Fetcher.crossSiteProxyTemplate=PROXY;
 
 var App = angular.module('myApp', [
-  'lumx'
+  'lumx',
+  'ngAudio',
 ]);
 
 App.config(function($locationProvider) {
@@ -43,7 +44,7 @@ App.config(function($locationProvider) {
   .html5Mode({ enabled: true, requireBase: false });
 });
 
-App.controller('Main', function($scope, $http, $location, $timeout, $sce, LxNotificationService, LxProgressService, LxDialogService) {
+App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudio, LxNotificationService, LxProgressService, LxDialogService) {
 
 
   // INIT functions
@@ -67,6 +68,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, LxNoti
     $scope.initialized = true;
     $scope.loggedIn = false;
     $scope.loginTLSButtonText = "Login";
+    $scope.audio = ngAudio.load('audio/button-3.mp3');
   };
 
   $scope.initStore = function() {
@@ -113,6 +115,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, LxNoti
       board.position(game.fen());
       $scope.position = game.fen();
       $scope.save();
+      $scope.audio.play();
     };
 
     var updateStatus = function() {
@@ -323,6 +326,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, LxNoti
 
       $scope.invalidate(a[1]);
       $scope.fetchBoard();
+      $scope.audio.play();
 
       Notification.requestPermission(function (permission) {
         // If the user is okay, let's create a notification

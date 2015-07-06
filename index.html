@@ -37,7 +37,7 @@
         <span class="app-name fs-display-2">Chess</span>
       </div>
       <div class="mt fs-subhead">Your personal chess manager</div>
-      <div><button class="btn btn--m btn--blue btn--raised" lx-ripple aria-label="Login" ng-click="TLSlogin()">
+      <div><button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple aria-label="Login" ng-click="TLSlogin()">
         <span>{{loginTLSButtonText}}</span>
       </button></div>
     </div>
@@ -112,7 +112,7 @@
             </div>
           </div>
 
-          <button class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="logout()">
+          <button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="logout()">
             Logout
           </button>
 
@@ -155,6 +155,8 @@
   <script src="bower_components/angular/angular.min.js"></script>
   <script src="bower_components/angular-ui/build/angular-ui.min.js"></script>
   <script src="bower_components/lumx/dist/lumx.min.js"></script>
+  <script src="bower_components/angular-audio/app/angular.audio.js"></script>
+
   <script src="vendor/rdflib.min.js"></script>
   <script src="vendor/common.js"></script>
 
