@@ -44,17 +44,23 @@ App.config(function($locationProvider) {
   .html5Mode({ enabled: true, requireBase: false });
 });
 
+
+/**
+ * The app controller
+ */
 App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudio, LxNotificationService, LxProgressService, LxDialogService) {
 
 
-  // INIT functions
-  //
-  // save app configuration if it's the first time the app runs
+  /**
+   * Initialize app
+   */
   $scope.initApp = function() {
     $scope.init();
   };
 
-  // set init variables
+  /**
+   * Initialize
+   */
   $scope.init = function() {
 
     $scope.initStore();
@@ -64,6 +70,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
 
   };
 
+  /**
+   * Init UI
+   */
   $scope.initUI = function() {
     $scope.initialized = true;
     $scope.loggedIn = false;
@@ -71,6 +80,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
     $scope.audio = ngAudio.load('audio/button-3.mp3');
   };
 
+  /**
+   * Init store
+   */
   $scope.initStore = function() {
     // start in memory DB
     g = $rdf.graph();
@@ -83,6 +95,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
     var fetcher    = $rdf.fetcher(kb);
   };
 
+  /**
+   * Init board
+   */
   $scope.initBoard = function() {
 
     // do not pick up pieces if the game is over
@@ -167,12 +182,16 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
 
 
   // RENDER functions
-  //
-  //
+  /**
+   * Render the main screen
+   */
   $scope.render = function() {
     $scope.renderBoard();
   };
 
+  /**
+   * Render the board
+   */
   $scope.renderBoard = function () {
     if (!$scope.position) return;
 
@@ -181,6 +200,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
     $scope.fen = game.fen();
   };
 
+  /**
+   * Refresh the board
+   */
   $scope.refresh = function() {
     $scope.fetchBoard();
     $scope.render();
@@ -194,6 +216,10 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
   // FETCH functions
   //
   //
+  /**
+   * Fetch the board
+   * @param  {String} position The URI for the position
+   */
   $scope.fetchBoard = function (position) {
     var storageURI = 'https://chess.databox.me/Public/.chess/test';
     if ($location.search().storageURI) {
@@ -212,6 +238,10 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
     });
   };
 
+  /**
+   * Invalidate a cached URI
+   * @param  {String} uri The URI to invalidate
+   */
   $scope.invalidate = function(uri) {
     console.log('invalidate : ' + uri);
     f.unload(uri);
@@ -221,10 +251,11 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
   // HELPER functions
   //
   //
-  $scope.openDialog = function(elem, reset) {
-    if (reset) {
-      $scope.resetContact();
-    }
+  /**
+   * Open a modal dialog
+   * @param  {String} elem  [description]
+   */
+  $scope.openDialog = function(elem) {
     LxDialogService.open(elem);
     $(document).keyup(function(e) {
       if (e.keyCode===27) {
@@ -233,6 +264,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
     });
   };
 
+  /**
+   * Save the position
+   */
   $scope.save = function() {
     var position = $scope.position;
     if (!position) {
@@ -261,6 +295,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
 
   };
 
+  /**
+   * TLS Login with WebID
+   */
   $scope.TLSlogin = function() {
     $scope.loginTLSButtonText = 'Logging in...';
     $http({
@@ -287,7 +324,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
   };
 
 
-
+  /**
+   * Logout
+   */
   $scope.logout = function() {
     $scope.init();
     LxNotificationService.success('Logout Successful!');
@@ -296,14 +335,27 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
   // SOCKETS
   //
   //
+  /**
+   * Get wss from URI
+   * @param  {String} uri The URI to use
+   */
   function getWss(uri) {
     return 'wss://' + uri.split('/')[2];
   }
 
+  /**
+   * Send subscrption
+   * @param  {String} message The message
+   * @param  {String} socket  The socket to send to
+   */
   function sendSub(message, socket) {
     socket.send(message);
   }
 
+  /**
+   * Connect to a web socket
+   * @param  {String} sub Where to subscribe to
+   */
   function connectToSocket(sub) {
     if ($scope.socket) return;
 
@@ -351,7 +403,9 @@ App.controller('Main', function($scope, $http, $location, $timeout, $sce, ngAudi
 
 });
 
-// escape uris
+/**
+ * Escape URIs filter
+ */
 App.filter('escape', function() {
   return window.encodeURIComponent;
 });
