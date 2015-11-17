@@ -457,7 +457,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     socket.onmessage = function(msg) {
       var a = msg.data.split(' ');
       if (a[0] !== 'pub') return;
-      processMessage(a[1]);
+      processSocket(a[1]);
     };
 
   }
@@ -466,7 +466,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
    * Process message from socket
    * @param  {String} uri uri that has changed
    */
-  function processMessage(uri) {
+  function processSocket(uri) {
     console.log(uri);
 
     $scope.invalidate(uri);
