@@ -23,30 +23,31 @@
 
 <body ng-controller="Main" flow-prevent-drop flex-container="column">
 
-
-
-  <!-- Welcome page -->
-
+  <!-- welcome page -->
   <div class="welcome row grad-bg" ng-hide="loggedIn">
-
-
-
     <div class="absolute-center tc-white-1">
       <div class="welcome-title">
         <span class="icon icon--xl icon--flat mdi mdi-xbox-controller tc-white-1"></span>
         <span class="app-name fs-display-2">Chess</span>
       </div>
-      <div class="mt fs-subhead">Your personal chess manager</div>
-      <div><button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple aria-label="Login" ng-click="TLSlogin()">
-        <span>{{loginTLSButtonText}}</span>
-      </button></div>
+      <div class="mt fs-subhead">Your personal chess system</div>
+      <div>
+        <button ng-audio="audio/button-3.mp3" class="mt++ btn btn--l btn--black bgc-white-1" lx-ripple aria-label="Login" ng-click="TLSlogin()">
+          <span class="tc-light-blue-300 ng-binding">{{loginTLSButtonText}}</span>
+        </button>
+        <button ng-audio="audio/button-3.mp3" class="mt++ btn btn--l btn--black bgc-white-1" lx-ripple aria-label="Login" ng-click="">
+          <span><a class="tc-light-blue-300 ng-binding" target="_blank" href="https://linkeddata.github.io/signup/?tab=signup" class="tc-white">Signup</a></span>
+        </button>
+      </div>
     </div>
-    <!-- Login -->
   </div>
+  <!-- end welcome page -->
 
+
+  <!-- main page -->
   <div class="welcome row grad-bg" ng-hide="!loggedIn">
 
-
+    <!-- menu -->
     <div class="card">
       <div class="toolbar">
         <div class="toolbar__left mr+++">
@@ -54,17 +55,12 @@
             <i class="mdi mdi-menu"></i>
           </button>
         </div>
-
-        <span class="toolbar__label fs-title">Chess</span>
-
+        <span class="toolbar__label fs-title">Solid Chess</span>
         <div class="toolbar__right">
-
           <lx-dropdown position="right" from-top>
-
             <button class="btn btn--l btn--black btn--icon" lx-ripple lx-dropdown-toggle>
               <i class="mdi mdi-dots-vertical"></i>
             </button>
-
             <lx-dropdown-menu>
               <ul>
                 <li><a ng-click="openDialog('about')" class="dropdown-link">About</a></li>
@@ -75,56 +71,54 @@
         </div>
       </div>
     </div>
+    <!-- end menu -->
 
 
-
-
+    <!-- flexbox row -->
     <div class="tc-white-1" flex-container="row">
 
+      <!-- sidebar -->
       <div flex-item="2" flex-item-order="1">
-        <div class="sidebar sidebar--shown"
-            ng-class="{'sidebar--shown': isVisible()}">
-            <div class="sidebar-menu">
-                <ul>
-                  <li><a class="sidebar-menu__link">{{status}}</a></li>
-                </ul>
-            </div>
-        </div>
-      </div>
-
-      <div flex-item="6" flex-item-order="2"><div>
-
-        <div id="board" style="width: 400px"></div>
-        <div>
-
-
-
-          <div><a href="{{user}}">{{user}}</a></div>
-          <div>{{fen}}</div>
-          <div><a ng-href="https://nextchessmove.com/?fen={{fen | escape}}">(Hint)</a></div>
-
-
-          <div flex-container="row" flex-gutter="24">
-            <div flex-item>
-              <lx-text-field label="Storage URI">
-                <input type="text" ng-model="storageURI">
-              </lx-text-field>
-            </div>
+        <div class="sidebar sidebar--shown" ng-class="{'sidebar--shown': isVisible()}">
+          <div class="sidebar-menu">
+            <ul>
+              <li class="tc-blue-700"><a ng-click="cycleMax()"><span class="icon icon--m icon--flat mdi mdi-rotate-3d tc-blue-700"></span>Czech {{max}}</a></li>
+            </ul>
           </div>
-
-          <button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="logout()">
-            Logout
-          </button>
-
         </div>
-        <!-- Login -->
       </div>
+      <!-- end sidebar -->
 
-    </div></div>
+      <!-- main app -->
+      <div flex-item="6" flex-item-order="2">
+          <div id="board" style="width: 400px"></div>
+          <div>
+            <div><a href="{{user}}">{{user}}</a></div>
+            <div>{{fen}}</div>
+            <div><a ng-href="https://nextchessmove.com/?fen={{fen | escape}}">(Hint)</a></div>
+            <div flex-container="row" flex-gutter="24">
+              <div flex-item>
+                <lx-text-field label="Storage URI">
+                  <input type="text" ng-model="storageURI">
+                </lx-text-field>
+              </div>
+            </div>
+            <button ng-audio="audio/button-3.mp3" class="btn btn--m btn--blue btn--raised" lx-ripple lx-ripple aria-label="logout" ng-click="logout()">
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- end main app -->
+
+    </div>
+    <!-- end flexbox row -->
 
   </div>
+  <!-- end main page -->
 
-  <!-- About -->
+
+  <!-- about -->
   <lx-dialog class="dialog dialog--l" auto-close="true" id="about">
     <div class="dialog__header">
       <div class="toolbar bgc-blue-A700 pl+">
@@ -141,12 +135,16 @@
     <div class="dialog__content p+">
       <p>Chess is a personal chess game manager, that uses Linked Data to store games on your personal online datastore.</p>
       <br>
-      <p>This application follows the <a href="https://github.com/linkeddata/SoLiD/">SoLiD specifications</a> to ensure that your data stays private.</p>
+      <p>This application follows the <a href="https://github.com/solid/">SoLiD specifications</a> to ensure that your data stays private.</p>
+      <br>
+      <p><a target="_blank" href="https://github.com/melvincarvalho/chess/">Source Code</a></p>
     </div>
     <div class="dialog__actions">
       <button class="btn btn--m btn--black btn--flat" lx-ripple lx-dialog-close>Close</button>
     </div>
   </lx-dialog>
+  <!-- end about -->
+
 
 
   <!-- Deps -->
