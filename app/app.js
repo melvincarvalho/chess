@@ -44,6 +44,8 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
   var f,g;
 
+  var defaultStorageURI = 'https://chess.databox.me/Public/.chess/test';
+
   // INIT
   /**
   * Init app
@@ -194,7 +196,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * init from query string
   */
   $scope.initQueryString = function() {
-    $scope.storageURI = 'https://melvincarvalho.github.io/data/vocab/czech.ttl';
+    $scope.storageURI = defaultStorageURI;
     if ($location.search().storageURI) {
       $scope.storageURI = $location.search().storageURI;
     }
@@ -271,13 +273,12 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
    * @param  {String} position The URI for the position
    */
   $scope.fetchBoard = function (position) {
-    var storageURI = 'https://chess.databox.me/Public/.chess/test';
+    var storageURI = defaultStorageURI;
     if ($location.search().storageURI) {
       storageURI = $location.search().storageURI;
     }
     $scope.storageURI = storageURI;
     connectToSocket($scope.storageURI);
-
 
     f.requestURI(storageURI, undefined, true, function(ok, body) {
       var p = g.statementsMatching(undefined, TMP('fen'));
@@ -302,7 +303,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * fetchSeeAlso fetches the see also
   */
   $scope.fetchSeeAlso = function() {
-    var seeAlso = 'https://melvincarvalho.github.io/vocab/data/seeAlso.ttl';
+    var seeAlso = 'https://melvincarvalho.github.io/chess/data/seeAlso.ttl';
     if ($location.search().seeAlso) {
       seeAlso = $location.search().seeAlso;
     }
@@ -414,19 +415,15 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   }
 
   /**
-   * Send subscrption
-   * @param  {String} message The message
-   * @param  {String} socket  The socket to send to
-   */
-  function sendSub(message, socket) {
-    socket.send(message);
-  }
-
-  /**
    * Connect to a web socket
-   * @param  {String} sub Where to subscribe to
+   * @param  {String}  sub Where to subscribe to
+   * @param  {boolean} quiet dont ping server
    */
-  function connectToSocket(sub) {
+  function connectToSocket(sub, quiet) {
+    // Some servers time out after 5 minutes inactive
+    var INTERVAL  = 240 * 1000;
+    var RECONNECT = 60 * 1000;
+
     if ($scope.socket) return;
 
     var socket;
@@ -439,34 +436,51 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     socket.onopen = function(){
       console.log(sub);
       $scope.socket = socket;
+      socket.send('sub ' + sub, socket);
+
+      if (!quiet) {
+        setInterval(function() { socket.send('ping'); }, INTERVAL);
+      }
+
+    };
+
+    socket.onerror = function(){
+      console.log('socket error');
+      setTimeout(connect, RECONNECT);
+    };
+
+    socket.onclose = function(){
+      console.log('socket closed');
+      setTimeout(connect, RECONNECT);
     };
 
     socket.onmessage = function(msg) {
-      console.log('Incoming message : ');
       var a = msg.data.split(' ');
-      console.log(a[1]);
-
-      $scope.invalidate(a[1]);
-      $scope.fetchBoard();
-      $scope.audio.play();
-
-      Notification.requestPermission(function (permission) {
-        // If the user is okay, let's create a notification
-        if (permission === "granted") {
-          notify = true;
-        }
-      });
-
+      if (a[0] !== 'pub') return;
+      processMessage(a[1]);
     };
 
-    // delay in case socket is still opening
-    var DELAY = 1000;
-    setTimeout(function(){
-      sendSub('sub ' + sub, socket);
-    }, DELAY);
-
-
   }
+
+  /**
+   * Process message from socket
+   * @param  {String} uri uri that has changed
+   */
+  function processMessage(uri) {
+    console.log(uri);
+
+    $scope.invalidate(uri);
+    $scope.fetchBoard();
+    $scope.audio.play();
+
+    Notification.requestPermission(function (permission) {
+      // If the user is okay, let's create a notification
+      if (permission === "granted") {
+        notify = true;
+      }
+    });
+  }
+
 
 
   $scope.initApp();
