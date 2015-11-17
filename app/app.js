@@ -57,7 +57,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   */
   $scope.init = function() {
 
-    $scope.initStore();
+    $scope.initRDF();
     $scope.initBoard();
     $scope.initUI();
 
@@ -80,21 +80,6 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     $scope.loggedIn = false;
     $scope.loginTLSButtonText = "Login";
     $scope.audio = ngAudio.load('audio/button-3.mp3');
-  };
-
-  /**
-   * Init store
-   */
-  $scope.initStore = function() {
-    // start in memory DB
-    g = $rdf.graph();
-    f = $rdf.fetcher(g);
-    // add CORS proxy
-    var PROXY      = "https://data.fm/proxy?uri={uri}";
-    var AUTH_PROXY = "https://rww.io/auth-proxy?uri=";
-    //$rdf.Fetcher.crossSiteProxyTemplate=PROXY;
-    var kb         = $rdf.graph();
-    var fetcher    = $rdf.fetcher(kb);
   };
 
   /**
@@ -186,21 +171,6 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * Get values from localStorage
   */
   $scope.initLocalStorage = function() {
-    if (localStorage.getItem('again')) {
-      $scope.again = JSON.parse(localStorage.getItem('again'));
-    } else {
-      $scope.again = [];
-    }
-    if (localStorage.getItem('good')) {
-      $scope.good = JSON.parse(localStorage.getItem('good'));
-    } else {
-      $scope.good = [];
-    }
-    if (localStorage.getItem('easy')) {
-      $scope.easy = JSON.parse(localStorage.getItem('easy'));
-    } else {
-      $scope.easy = [];
-    }
     if (localStorage.getItem('user')) {
       var user = JSON.parse(localStorage.getItem('user'));
       $scope.loginSuccess(user);
@@ -224,34 +194,11 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   * init from query string
   */
   $scope.initQueryString = function() {
-    if ($location.search().max) {
-      $scope.max = $location.search().max;
-    }
-    $scope.setMax($scope.max);
-
     $scope.storageURI = 'https://melvincarvalho.github.io/data/vocab/czech.ttl';
     if ($location.search().storageURI) {
       $scope.storageURI = $location.search().storageURI;
     }
     $scope.setStorageURI($scope.storageURI);
-
-    if ($location.search().lang1) {
-      $scope.lang1 = $location.search().lang1;
-    }
-
-    if ($location.search().lang2) {
-      $scope.lang2 = $location.search().lang2;
-    }
-
-  };
-
-  /**
-  * setMax set maximum number of words
-  * @param  {Number} max number or words
-  */
-  $scope.setMax = function(max) {
-    $scope.max = max;
-    $location.search('max', $scope.max);
   };
 
   /**
