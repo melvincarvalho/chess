@@ -28,6 +28,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
   // Namespaces
   var CHAT  = $rdf.Namespace("https://ns.rww.io/chat#");
   var CURR  = $rdf.Namespace("https://w3id.org/cc#");
+  var CHESS = $rdf.Namespace("https://melvincarvalho.github.io/chess/ns/chess.ttl#");
   var DCT   = $rdf.Namespace("http://purl.org/dc/terms/");
   var FACE  = $rdf.Namespace("https://graph.facebook.com/schema/~/");
   var FOAF  = $rdf.Namespace("http://xmlns.com/foaf/0.1/");
@@ -281,7 +282,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     connectToSocket($scope.storageURI);
 
     f.requestURI(storageURI, undefined, true, function(ok, body) {
-      var p = g.statementsMatching(undefined, TMP('fen'));
+      var p = g.statementsMatching(undefined, CHESS('fen'));
       if (p.length) {
         $scope.position = p[0].object.value;
         $scope.render();
@@ -331,7 +332,7 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
       headers: {
         "Content-Type": "text/turtle"
       },
-      data: '<#this> '+ TMP('fen') +' """' + position + '""" .',
+      data: '<#this> '+ CHESS('fen') +' """' + position + '""" .',
     }).
     success(function(data, status, headers) {
       LxNotificationService.success('Position saved');
