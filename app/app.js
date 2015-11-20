@@ -473,13 +473,6 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
     $scope.invalidate(uri);
     $scope.fetchBoard();
     $scope.audio.play();
-
-    Notification.requestPermission(function (permission) {
-      // If the user is okay, let's create a notification
-      if (permission === "granted") {
-        notify = true;
-      }
-    });
   }
 
 
