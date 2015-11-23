@@ -447,12 +447,12 @@ App.controller('Main', function($scope, $http, $location, $timeout, ngAudio, LxN
 
     socket.onerror = function(){
       console.log('socket error');
-      setTimeout(connect, RECONNECT);
+      setTimeout(connectToSocket, RECONNECT);
     };
 
     socket.onclose = function(){
       console.log('socket closed');
-      setTimeout(connect, RECONNECT);
+      setTimeout(connectToSocket, RECONNECT);
     };
 
     socket.onmessage = function(msg) {
