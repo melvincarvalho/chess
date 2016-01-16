@@ -7,7 +7,7 @@
   ],
   "description": "Clipboard",
   "license": "MIT",
-  "keywords": "webid, linked data, clipboard, SoLiD",
+  "keywords": "webid, linked data, clipboard, Solid",
   "private": false,
   "ignore": [
     "**/.*",
